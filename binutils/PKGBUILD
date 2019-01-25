@@ -1,0 +1,93 @@
+# Maintainer:  Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+
+# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
+
+pkgname=binutils
+pkgver=2.31.1
+pkgrel=60
+pkgdesc='A set of programs to assemble and manipulate binary and object files'
+arch=(x86_64)
+url='http://www.gnu.org/software/binutils/'
+license=(GPL)
+groups=(base-devel)
+depends=(glibc zlib)
+checkdepends=(dejagnu bc)
+conflicts=(binutils-multilib)
+replaces=(binutils-multilib)
+options=(staticlibs !distcc !ccache)
+_commit=595d734
+source=(git+git://github.com/bminor/binutils-gdb.git#commit=$_commit
+        0001-PR23428-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
+        0002-PR23460-Close-resource-leaks-in-the-BFD-library-s-plugin-han.patch
+        0003-PR23460-Add-a-testcase-for-PR-binutils-23460.patch
+        0004-PR23486-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED-x86_64.patch
+        0005-PR23486-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
+        0006-PR23428-x86-Properly-add-X86_ISA_1_NEEDED-property.patch)
+
+prepare() {
+  mkdir -p binutils-build
+
+  #cd binutils-gdb
+  cd binutils-gdb
+
+  # https://sourceware.org/bugzilla/show_bug.cgi?id=23428
+  # https://sourceware.org/bugzilla/show_bug.cgi?id=23486
+  #patch -Np1 -i ../0001-PR23428-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
+  #patch -Np1 -i ../0004-PR23486-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED-x86_64.patch
+  #patch -Np1 -i ../0005-PR23486-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
+  #patch -Np1 -i ../0006-PR23428-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
+
+  # https://sourceware.org/bugzilla/show_bug.cgi?id=23460
+  patch -Np1 -i ../0002-PR23460-Close-resource-leaks-in-the-BFD-library-s-plugin-han.patch
+  patch -Np1 -i ../0003-PR23460-Add-a-testcase-for-PR-binutils-23460.patch
+
+  # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+}
+
+build() {
+  cd binutils-gdb
+
+  "$srcdir/binutils-gdb/configure" \
+    --prefix=/usr \
+    --with-lib-path=/usr/lib:/usr/local/lib \
+    --with-bugurl=https://bugs.archlinux.org/ \
+    --enable-deterministic-archives \
+    --enable-gold \
+    --enable-ld=default \
+    --enable-lto \
+    --enable-plugins \
+    --enable-relro \
+    --enable-shared \
+    --enable-targets=x86_64-pep \
+    --enable-threads \
+    --disable-gdb \
+    --disable-werror \
+    --disable-nls \
+    --with-pic
+
+  make configure-host
+  make tooldir=/usr
+}
+
+check() {
+  cd binutils-gdb
+
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # ignore failures in gold testsuite...
+  make -k LDFLAGS="" check || true
+}
+
+package() {
+  cd binutils-gdb
+  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
+
+  # Remove unwanted files
+  rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
+
+  # No shared linking to these files outside binutils
+  rm -f "$pkgdir"/usr/lib/lib{bfd,opcodes}.so
+  echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "$pkgdir/usr/lib/libbfd.so"
+  echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "$pkgdir/usr/lib/libopcodes.so"
+}
