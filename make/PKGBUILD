@@ -1,0 +1,50 @@
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+
+pkgname=make
+pkgver=4.2.1
+pkgrel=555
+pkgdesc="GNU make utility to maintain groups of programs"
+arch=('x86_64')
+url="http://www.gnu.org/software/make"
+license=('GPL3')
+groups=('base-devel')
+depends=('glibc' 'guile')
+source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.bz2{,.sig}
+        make-02-Fix_tests.patch
+make-4.0-newlines.patch
+make-4.0-noclock_gettime.patch
+make-4.0-weird-shell.patch
+make-4.2-j8k.patch
+make-glibc_alloc_fix.patch)
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+  #patch -p1 -i ${srcdir}/guile-2.2.patch
+
+patch -p1 -i ${srcdir}/make-02-Fix_tests.patch
+patch -p1 -i ${srcdir}/make-4.0-newlines.patch
+patch -p1 -i ${srcdir}/make-4.0-noclock_gettime.patch
+patch -p1 -i ${srcdir}/make-4.0-weird-shell.patch
+patch -p1 -i ${srcdir}/make-4.2-j8k.patch
+patch -p1 -i ${srcdir}/make-glibc_alloc_fix.patch
+
+  #autoreconf -fi
+ autoreconf --verbose --install --force -I m4 
+}
+
+build() {
+  cd ${pkgname}-${pkgver}
+  ./configure --prefix=/usr --without-guile
+  make
+}
+
+check() {
+  cd ${pkgname}-${pkgver}
+  make -k check
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+}
