@@ -178,7 +178,6 @@ package_gcc-libs() {
     make -C $CHOST/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-  make -C $CHOST/libobjc DESTDIR="$pkgdir" install-libs
   make -C $CHOST/libstdc++-v3/po DESTDIR="$pkgdir" install
   make -C $CHOST/libmpx DESTDIR="$pkgdir" install
   rm -f "$pkgdir/usr/lib/libmpx.spec"
@@ -258,7 +257,7 @@ package_gcc() {
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
   make -C gcc DESTDIR="$pkgdir" install-man install-info
-  rm "$pkgdir"/usr/share/info/{gnat-style,gnat_rm,gnat_ugn}.info
+  #rm "$pkgdir"/usr/share/info/{gnat-style,gnat_rm,gnat_ugn}.info
 
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
