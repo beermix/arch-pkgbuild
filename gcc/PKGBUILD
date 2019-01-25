@@ -8,7 +8,7 @@ pkgname=(gcc gcc-libs)
 pkgver=8.2.1+20181127
 _majorver=${pkgver:0:1}
 _islver=0.20
-pkgrel=103
+pkgrel=104
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -33,6 +33,7 @@ source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
         'zero-regs-gcc8.patch'
         'hj-patch-round.patch'
         'CVE-2018-18484.patch'
+        0019-isl-0.20.patch
         c89 c99)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
@@ -84,6 +85,7 @@ prepare() {
   patch -Np1 < ../zero-regs-gcc8.patch
   patch -Np1 < ../hj-patch-round.patch
   patch -Np1 < ../CVE-2018-18484.patch
+  patch -Np1 < ../0019-isl-0.20.patch
 
   # link isl for in-tree build
   ln -s ../isl-${_islver} isl
