@@ -4,3 +4,4 @@
 pkg
 src
 *.sig
+binutils-gdb

@@ -3,7 +3,7 @@
 
 pkgname=wget
 pkgver=1.20.1
-pkgrel=20
+pkgrel=22
 pkgdesc='Network utility to retrieve files from the Web'
 url='https://www.gnu.org/software/wget/wget.html'
 arch=('x86_64')
@@ -33,9 +33,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --disable-rpath \
-    --disable-nls \
-    --with-ssl=openssl
+    --disable-rpath
   make
 }
 
