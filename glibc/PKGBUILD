@@ -49,7 +49,6 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
 'spin-smarter.patch'
 'nostackshrink.patch'
 'strcpy-avx2.patch')
-validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8) # Carlos O'Donell
 
 prepare() {
   mkdir -p glibc-build lib32-glibc-build
