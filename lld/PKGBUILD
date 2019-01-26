@@ -59,7 +59,7 @@ package() {
   install -Dm644 ../LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   # Remove documentation sources
-  rm -r "$pkgdir"/usr/share/doc/$pkgname/html/{_sources,.buildinfo}
+  # rm -r "$pkgdir"/usr/share/doc/$pkgname/html/{_sources,.buildinfo}
 }
 
 # vim:set ts=2 sw=2 et:
