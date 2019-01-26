@@ -82,15 +82,10 @@ prepare() {
 patch -Np1 < ../bz20338.patch
 
 patch -Np1 < ../glibc-stable-branch.patch
-#patch -Np1 < ../0001-Set-host.conf-multi-to-on-by-default.patch
 patch -Np1 < ../skip-error-msg-ld.so.conf.patch
 patch -Np1 < ../ldconfig-format-new.patch
-#patch -Np1 < ../0001-sysdeps-unix-Add-support-for-usr-lib32-as-a-system-l.patch
 patch -Np1 < ../nsswitch-altfiles.patch
 patch -Np1 < ../ld-so-cache-in-var.patch
-#patch -Np1 < ../fewerlocales.patch
-#patch -Np1 < ../mkdir-ldconfig.patch
-#patch -Np1 < ../locale-var-cache.patch
 patch -Np1 < ../nonscd.patch
 patch -Np1 < ../alternate_trim.patch
 patch -Np1 < ../madvise-bss.patch
@@ -104,7 +99,6 @@ patch -Np1 < ../stateless.patch
 patch -Np1 < ../nsswitch-altfiles-bugfix.patch
 patch -Np1 < ../mathlto.patch
 patch -Np1 < ../vzeroupper-2.27.patch
-#patch -Np1 < ../0001-x86-64-Remove-sysdeps-x86_64-fpu-s_sinf.S.patch
 patch -Np1 < ../pause.patch
 patch -Np1 < ../gcc-8-fix.patch
 patch -Np1 < ../spin-smarter.patch
