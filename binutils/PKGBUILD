@@ -52,7 +52,7 @@ prepare() {
   mkdir -p binutils-build
 
   #cd binutils-gdb
-  cd binutils
+  cd binutils-2.31.1
 
   # https://sourceware.org/bugzilla/show_bug.cgi?id=23428
   # https://sourceware.org/bugzilla/show_bug.cgi?id=23486
@@ -90,9 +90,9 @@ patch -Np1 < ../switch-build-flow-to-production.patch
 }
 
 build() {
-  cd binutils
+  cd binutils-2.31.1
 
-  "$srcdir/binutils/configure" \
+  "$srcdir/binutils-2.31.1/configure" \
     --prefix=/usr \
     --with-lib-path=/usr/lib:/usr/local/lib \
     --with-bugurl=https://bugs.archlinux.org/ \
@@ -115,7 +115,7 @@ build() {
 }
 
 check() {
-  cd binutils
+  cd binutils-2.31.1
 
   # unset LDFLAGS as testsuite makes assumptions about which ones are active
   # ignore failures in gold testsuite...
@@ -123,7 +123,7 @@ check() {
 }
 
 package() {
-  cd binutils
+  cd binutils-2.31.1
   make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
 
   # Remove unwanted files
