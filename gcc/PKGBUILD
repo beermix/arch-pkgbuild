@@ -5,7 +5,7 @@
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgname=(gcc gcc-libs lib32-gcc-libs)
-pkgver=8+20190125
+pkgver=8.2.0
 _majorver=${pkgver:0:1}
 _islver=0.20
 pkgrel=200
@@ -16,8 +16,7 @@ url='http://gcc.gnu.org'
 makedepends=(binutils libmpc doxygen lib32-glibc lib32-gcc-libs python)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
-#source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-8/gcc-${pkgver/+/-}.tar.xz
+source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         http://isl.gforge.inria.fr/isl-${_islver}.tar.bz2
         '0001-Fix-stack-protection-issues.patch'
         'openmp-vectorize-v2.patch'
@@ -33,7 +32,9 @@ source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-8/gcc-${pkgver/+/-}.tar.xz
         'zero-regs-gcc8.patch'
         'hj-patch-round.patch'
         'CVE-2018-18484.patch'
-        0019-isl-0.20.patch
+        'max-is-safe-on-x86.patch'
+        '0019-isl-0.20.patch'
+        'gcc-stable-branch.patch'
         c89 c99)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
@@ -71,11 +72,13 @@ prepare() {
   [[ ! -d gcc ]] && ln -s gcc-${pkgver/+/-} gcc
   cd gcc
 
+  patch -Np1 < ../gcc-stable-branch.patch
   patch -Np1 < ../0001-Fix-stack-protection-issues.patch
   patch -Np1 < ../openmp-vectorize-v2.patch
   patch -Np1 < ../fortran-vector-v2.patch
   patch -Np1 < ../optimize.patch
   patch -Np1 < ../ipa-cp.patch
+  #patch -Np1 < ../max-is-safe-on-x86.patch
   patch -Np1 < ../optimize-at-least-some.patch
   patch -Np1 < ../gomp-relax.patch
   patch -Np1 < ../avx512-when-we-ask-for-it.patch
@@ -304,13 +307,13 @@ package_lib32-gcc-libs() {
   done
 
   make -C $CHOST/32/libobjc DESTDIR="$pkgdir" install-libs
-  make -C $CHOST/32/libmpx DESTDIR="$pkgdir" install
+  noti make -C $CHOST/32/libmpx DESTDIR="$pkgdir" install
   rm -f "$pkgdir/usr/lib32/libmpx.spec"
 
   # remove files provided by gcc-libs
   rm -rf "$pkgdir"/usr/lib
 
   # Install Runtime Library Exception
-  install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
-    "$pkgdir/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
+  #install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
+  #  "$pkgdir/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
 }
