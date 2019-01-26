@@ -139,6 +139,7 @@ build() {
       --enable-checking=release \
       --enable-cet=auto \
       --with-gnu-ld \
+      --disable-vtable-verify \
       --with-tune=haswell \
       --with-arch=westmere
 
