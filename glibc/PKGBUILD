@@ -57,22 +57,6 @@ prepare() {
 
 patch -Np1 < ../bz20338.patch
 
-#patch -Np1 < ../nonscd.patch
-#patch -Np1 < ../alternate_trim.patch
-#patch -Np1 < ../madvise-bss.patch
-#patch -Np1 < ../spinaphore.patch
-#patch -Np1 < ../large-page-huge-page.patch
-#patch -Np1 < ../use_madv_free.patch
-#patch -Np1 < ../malloc_tune.patch
-#patch -Np1 < ../0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
-#patch -Np1 < ../stateless.patch
-#patch -Np1 < ../mathlto.patch
-#patch -Np1 < ../vzeroupper-2.27.patch
-#patch -Np1 < ../gcc-8-fix.patch
-#patch -Np1 < ../spin-smarter.patch
-#patch -Np1 < ../nostackshrink.patch
-
-#patch -Np1 < ../fewerlocales.patch
 patch -Np1 < ../nonscd.patch
 patch -Np1 < ../alternate_trim.patch
 patch -Np1 < ../madvise-bss.patch
@@ -84,14 +68,12 @@ patch -Np1 < ../0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
 patch -Np1 < ../stateless.patch
 patch -Np1 < ../mathlto.patch
 patch -Np1 < ../vzeroupper-2.27.patch
-#patch -Np1 < ../0001-x86-64-Remove-sysdeps-x86_64-fpu-s_sinf.S.patch
 patch -Np1 < ../pause.patch
 patch -Np1 < ../gcc-8-fix.patch
 patch -Np1 < ../spin-smarter.patch
 patch -Np1 < ../nostackshrink.patch
 patch -Np1 < ../strcpy-avx2.patch
 patch -Np1 < ../fix-ld-audit-performance.patch
-#patch -Np1 < ../c-utf8-locale.patch
 patch -Np1 < ../CVE-2016-10739.patch
 patch -Np1 < ../CVE-2019-6488.patch
 }
