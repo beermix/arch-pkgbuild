@@ -5,7 +5,7 @@
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgname=(gcc gcc-libs lib32-gcc-libs)
-pkgver=20190125
+pkgver=8+20190125
 _majorver=${pkgver:0:1}
 _islver=0.20
 pkgrel=200
@@ -17,7 +17,7 @@ makedepends=(binutils libmpc doxygen lib32-glibc lib32-gcc-libs python)
 checkdepends=(dejagnu inetutils)
 options=(!emptydirs)
 #source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-8/gcc-8-${pkgver/+/-}.tar.xz
+source=(ftp://gcc.gnu.org/pub/gcc/snapshots/LATEST-8/gcc-${pkgver/+/-}.tar.xz
         http://isl.gforge.inria.fr/isl-${_islver}.tar.bz2
         '0001-Fix-stack-protection-issues.patch'
         'openmp-vectorize-v2.patch'
@@ -58,17 +58,17 @@ snapshot() {
   _pkgver=${basever}-${datestamp}
 
   mv gcc-r${_svnrev} gcc-${_pkgver}
-  tar cf - gcc-8-${_pkgver} | xz > gcc-8-${_pkgver}.tar.xz
-  rm -rf gcc-8-${_pkgver}
-  gpg -b gcc-8-${_pkgver}.tar.xz
-  scp gcc-8-${_pkgver}.tar.xz{,.sig} sources.archlinux.org:/srv/ftp/other/gcc/
+  tar cf - gcc-${_pkgver} | xz > gcc-${_pkgver}.tar.xz
+  rm -rf gcc-${_pkgver}
+  gpg -b gcc-${_pkgver}.tar.xz
+  scp gcc-${_pkgver}.tar.xz{,.sig} sources.archlinux.org:/srv/ftp/other/gcc/
 
   echo
   echo "pkgver=${_pkgver/-/+}"
 }
 
 prepare() {
-  [[ ! -d gcc ]] && ln -s gcc-8-${pkgver/+/-} gcc
+  [[ ! -d gcc ]] && ln -s gcc-${pkgver/+/-} gcc
   cd gcc
 
   patch -Np1 < ../0001-Fix-stack-protection-issues.patch
@@ -162,8 +162,7 @@ package_gcc-libs() {
   groups=(base)
   depends=('glibc>=2.27')
   options+=(!strip)
-  provides=($pkgname-multilib libubsan.so libasan.so
-            libtsan.so liblsan.so)
+  provides=($pkgname-multilib libubsan.so libasan.so libtsan.so liblsan.so)
   replaces=($pkgname-multilib)
 
   cd gcc-build
@@ -246,12 +245,10 @@ package_gcc() {
   make -C $CHOST/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
   make -C $CHOST/libsanitizer/tsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
   make -C $CHOST/libsanitizer/lsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-  #make -C $CHOST/libmpx DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
   make -C $CHOST/32/libgomp DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
   make -C $CHOST/32/libitm DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
   make -C $CHOST/32/libsanitizer DESTDIR="$pkgdir" install-nodist_{saninclude,toolexeclib}HEADERS
   make -C $CHOST/32/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-  #make -C $CHOST/32/libmpx DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
 
   make -C libiberty DESTDIR="$pkgdir" install
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
