@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.31.1
-pkgrel=65
+pkgrel=70
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='http://www.gnu.org/software/binutils/'
@@ -64,6 +64,7 @@ build() {
     --enable-targets=x86_64-pep \
     --disable-gdb \
     --disable-werror \
+    --with-system-zlib \
     --disable-nls
 
   make configure-host
