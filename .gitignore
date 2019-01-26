@@ -5,3 +5,4 @@ pkg
 src
 *.sig
 binutils-gdb
+glibc
