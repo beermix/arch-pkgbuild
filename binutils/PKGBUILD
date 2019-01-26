@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.31.1
-pkgrel=70
+pkgrel=80
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='http://www.gnu.org/software/binutils/'
@@ -51,19 +51,22 @@ prepare() {
 build() {
   cd binutils-gdb
 
- "$srcdir/binutils-gdb/configure" \
+  "$srcdir/binutils-gdb/configure" \
     --prefix=/usr \
     --with-lib-path=/usr/lib:/usr/local/lib \
     --with-bugurl=https://bugs.archlinux.org/ \
-    --enable-deterministic-archives=no \
+    --enable-deterministic-archives \
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
     --enable-plugins \
+    --enable-relro \
     --enable-shared \
     --enable-targets=x86_64-pep \
+    --enable-threads \
     --disable-gdb \
     --disable-werror \
+    --with-pic \
     --with-system-zlib \
     --disable-nls
 
