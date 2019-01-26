@@ -29,13 +29,13 @@ patch -p1 -i ${srcdir}/make-4.0-weird-shell.patch
 patch -p1 -i ${srcdir}/make-4.2-j8k.patch
 patch -p1 -i ${srcdir}/make-glibc_alloc_fix.patch
 
-  #autoreconf -fi
- autoreconf --verbose --install --force -I m4 
+  autoreconf -fi
+ #autoreconf --verbose --install --force -I m4 
 }
 
 build() {
   cd ${pkgname}-${pkgver}
-  ./configure --prefix=/usr --without-guile
+  ./configure --prefix=/usr 
   make
 }
 
