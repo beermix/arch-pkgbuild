@@ -23,7 +23,7 @@ prepare() {
   #patch -p1 -i ${srcdir}/guile-2.2.patch
 
 patch -p1 -i ${srcdir}/make-02-Fix_tests.patch
-patch -p1 -i ${srcdir}/make-4.0-newlines.patch
+#patch -p1 -i ${srcdir}/make-4.0-newlines.patch
 patch -p1 -i ${srcdir}/make-4.0-noclock_gettime.patch
 patch -p1 -i ${srcdir}/make-4.0-weird-shell.patch
 patch -p1 -i ${srcdir}/make-4.2-j8k.patch
