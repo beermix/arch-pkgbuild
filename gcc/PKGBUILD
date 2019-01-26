@@ -8,7 +8,7 @@ pkgname=(gcc gcc-libs)
 pkgver=8.2.1+20181127
 _majorver=${pkgver:0:1}
 _islver=0.20
-pkgrel=110
+pkgrel=111
 pkgdesc='The GNU Compiler Collection'
 arch=(x86_64)
 license=(GPL LGPL FDL custom)
@@ -119,7 +119,8 @@ build() {
       --enable-languages=c,c++,lto \
       --enable-shared \
       --enable-threads=posix \
-      --enable-libmpx \
+      --disable-libmpx \
+      --with-system-zlib \
       --with-isl \
       --enable-__cxa_atexit \
       --disable-libunwind-exceptions \
@@ -131,7 +132,6 @@ build() {
       --enable-lto \
       --enable-plugin \
       --enable-install-libiberty \
-      --disable-vtable-verify \
       --with-linker-hash-style=gnu \
       --enable-gnu-indirect-function \
       --enable-multilib \
@@ -139,8 +139,8 @@ build() {
       --enable-checking=release \
       --enable-cet=no \
       --disable-nls \
-      --with-system-zlib \
-      --with-tune=generic
+      --with-tune=haswell \
+      --with-arch=westmere
 
   make
 
@@ -258,7 +258,6 @@ package_gcc() {
   install -m644 libiberty/pic/libiberty.a "$pkgdir/usr/lib"
 
   make -C gcc DESTDIR="$pkgdir" install-man install-info
-  #rm "$pkgdir"/usr/share/info/{gnat-style,gnat_rm,gnat_ugn}.info
 
   make -C libcpp DESTDIR="$pkgdir" install
   make -C gcc DESTDIR="$pkgdir" install-po
@@ -285,3 +284,4 @@ package_gcc() {
   ln -s /usr/share/licenses/gcc-libs/RUNTIME.LIBRARY.EXCEPTION \
     "$pkgdir/usr/share/licenses/$pkgname/"
 }
+
