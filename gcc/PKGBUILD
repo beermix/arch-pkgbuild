@@ -306,10 +306,6 @@ package_lib32-gcc-libs() {
     make -C $CHOST/32/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
   done
 
-  make -C $CHOST/32/libobjc DESTDIR="$pkgdir" install-libs
-  noti make -C $CHOST/32/libmpx DESTDIR="$pkgdir" install
-  rm -f "$pkgdir/usr/lib32/libmpx.spec"
-
   # remove files provided by gcc-libs
   rm -rf "$pkgdir"/usr/lib
 
