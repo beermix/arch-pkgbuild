@@ -34,22 +34,24 @@ prepare() {
 build() {
   cd "$srcdir/llvm-$pkgver.src/build"
 
+  export CCACHE_SLOPPINESS=file_macro,time_macros,include_file_mtime,include_file_ctime
+
   cmake .. -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DLLVM_HOST_TRIPLE=$CHOST \
     -DLLVM_BUILD_LLVM_DYLIB=ON \
-    -DLLVM_CCACHE_BUILD=ON \
     -DLLVM_LINK_LLVM_DYLIB=ON \
     -DLLVM_INSTALL_UTILS=ON \
     -DLLVM_ENABLE_RTTI=ON \
     -DLLVM_ENABLE_FFI=ON \
-    -DLLVM_BUILD_TESTS=OFF \
+    -DLLVM_BUILD_TESTS=ON \
     -DLLVM_BUILD_DOCS=OFF \
-    -DLLVM_ENABLE_SPHINX=OFF \
+    -DLLVM_ENABLE_SPHINX=ON \
     -DLLVM_ENABLE_DOXYGEN=OFF \
-    -DLLVM_TARGETS_TO_BUILD=X86 \
     -DSPHINX_WARNINGS_AS_ERRORS=OFF \
+    -DLLVM_TARGETS_TO_BUILD=X86 \
+    -DLLVM_CCACHE_BUILD=ON \
     -DFFI_INCLUDE_DIR=$(pkg-config --variable=includedir libffi) \
     -DLLVM_BINUTILS_INCDIR=/usr/include
   ninja all

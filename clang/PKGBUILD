@@ -3,7 +3,7 @@
 
 pkgname=clang
 pkgver=7.0.1
-pkgrel=201
+pkgrel=202
 pkgdesc="C language family frontend for LLVM"
 arch=('x86_64')
 url="https://clang.llvm.org/"
@@ -40,21 +40,25 @@ prepare() {
 build() {
   cd "$srcdir/cfe-$pkgver.src/build"
 
+    export CC='/bin/ccache /bin/gcc'
+    export CXX='/bin/ccache /bin/g++'
+    export CCACHE_SLOPPINESS=file_macro,time_macros,include_file_mtime,include_file_ctime
+
   cmake .. -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DPYTHON_EXECUTABLE=/usr/bin/python \
     -DBUILD_SHARED_LIBS=ON \
     -DLLVM_LINK_LLVM_DYLIB=ON \
-    -DLLVM_ENABLE_RTTI=OFF \
-    -DLLVM_BUILD_TESTS=OFF \
+    -DLLVM_ENABLE_RTTI=ON \
+    -DLLVM_BUILD_TESTS=ON \
     -DLLVM_INCLUDE_DOCS=OFF \
     -DLLVM_BUILD_DOCS=OFF \
-    -D=OFF \
+    -DLLVM_ENABLE_SPHINX=ON \
     -DSPHINX_WARNINGS_AS_ERRORS=OFF \
     -DLLVM_EXTERNAL_LIT=/usr/bin/lit \
     -DLLVM_MAIN_SRC_DIR="$srcdir/llvm-$pkgver.src"
-  ionice -c3 nice -n20 noti ninja -j7
+  ionice -c3 nice -n20 noti ninja
 }
 
 check() {
