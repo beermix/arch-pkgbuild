@@ -13,13 +13,25 @@ url='http://invisible-island.net/ncurses/ncurses.html'
 license=(MIT)
 depends=(glibc gcc-libs)
 provides=(libncurses++w.so libformw.so libmenuw.so libpanelw.so libncursesw.so)
-source=(http://invisible-mirror.net/archives/ncurses/current/ncurses-${_pkgver}.tar.gz)
+source=(http://invisible-mirror.net/archives/ncurses/ncurses-6.0.tar.gz
+ncurses-100-ncurses-5.6-20080112-urxvt.patch
+ncurses-101-ncurses-5.6-20080628-kbs.patch
+ncurses-102-ncurses-5.9-gcc-5.patch
+ncurses-200-fix_missing_include.patch
+ncurses-900-terminfo.patch
+)
 md5sums=('b7b1cedc484172434855b00831183458'
          'SKIP')
 validpgpkeys=('C52048C0C0748FEE227D47A2702353E0F7E48EDB')  # Thomas Dickey
 
 build() {
   cd $pkgname-${_pkgver}
+
+  patch -Np1 -i ../ncurses-100-ncurses-5.6-20080112-urxvt.patch
+  patch -Np1 -i ../ncurses-101-ncurses-5.6-20080628-kbs.patch
+  patch -Np1 -i ../ncurses-102-ncurses-5.9-gcc-5.patch
+  patch -Np1 -i ../ncurses-200-fix_missing_include.patch
+  patch -Np1 -i ../ncurses-900-terminfo.patch
 
   ./configure --prefix=/usr --mandir=/usr/share/man \
     --with-pkg-config-libdir=/usr/lib/pkgconfig \
