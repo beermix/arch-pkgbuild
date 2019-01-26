@@ -7,7 +7,7 @@
 pkgbase=glibc
 pkgname=(glibc lib32-glibc)
 pkgver=2.28
-pkgrel=300
+pkgrel=301
 arch=(x86_64)
 url='http://www.gnu.org/software/libc'
 license=(GPL LGPL)
@@ -19,6 +19,8 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
         locale-gen
         lib32-glibc.conf
+        bz20338.patch
+        0001-Revert-elf-Correct-absolute-SHN_ABS-symbol-run-time-.patch
         '0001-Set-host.conf-multi-to-on-by-default.patch'
          'skip-error-msg-ld.so.conf.patch'
 'ldconfig-format-new.patch'
@@ -66,11 +68,9 @@ patch -Np1 < ../0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
 patch -Np1 < ../stateless.patch
 patch -Np1 < ../mathlto.patch
 patch -Np1 < ../vzeroupper-2.27.patch
-#patch -Np1 < ../pause.patch
 patch -Np1 < ../gcc-8-fix.patch
 patch -Np1 < ../spin-smarter.patch
 patch -Np1 < ../nostackshrink.patch
-#patch -Np1 < ../strcpy-avx2.patch
 }
 
 build() {
@@ -83,9 +83,7 @@ build() {
       --enable-lock-elision
       --enable-multi-arch
       --enable-stack-protector=strong
-      --enable-static-pie
       --enable-kernel=4.17
-      --without-selinux
       --disable-profile
       --disable-werror
   )
@@ -99,9 +97,6 @@ build() {
 
   # remove fortify for building libraries
   CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
-  CFLAGS=${CFLAGS/--param=ssp-buffer-size=4 -fstack-protector -fno-plt/}
-  CXXFLAGS=${CXXFLAGS/--param=ssp-buffer-size=4 -fstack-protector -fno-plt/}
-  LDFLAGS=${LDFLAGS/-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now/}
 
   "$srcdir/glibc/configure" \
       --libdir=/usr/lib \
