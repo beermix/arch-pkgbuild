@@ -4,8 +4,8 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 
 pkgname=binutils
-pkgver=2.31.99
-pkgrel=55
+pkgver=2.31.1
+pkgrel=100
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='http://www.gnu.org/software/binutils/'
@@ -17,7 +17,7 @@ conflicts=(binutils-multilib)
 replaces=(binutils-multilib)
 options=(staticlibs !distcc !ccache)
 _commit=595d734
-source=(git+git://github.com/bminor/binutils-gdb.git#commit=$_commit)
+source=(https://fossies.org/linux/misc/binutils-2.31.1.tar.xz)
 validpgpkeys=(3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F)
 md5sums=('5b7c9d4ce96f507d95c1b9a255e52418'
          'SKIP'

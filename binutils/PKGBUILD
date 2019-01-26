@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.31.1
-pkgrel=81
+pkgrel=100
 pkgdesc='A set of programs to assemble and manipulate binary and object files'
 arch=(x86_64)
 url='http://www.gnu.org/software/binutils/'
@@ -17,28 +17,69 @@ makedepends=(automake autoconf bison m4)
 conflicts=(binutils-multilib)
 replaces=(binutils-multilib)
 options=(staticlibs !distcc !ccache)
-_commit=0e07def
-source=(git+git://github.com/bminor/binutils-gdb.git#commit=$_commit
+_commit=595d734
+source=(https://fossies.org/linux/misc/binutils-2.31.1.tar.xz
         0001-PR23428-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
         0002-PR23460-Close-resource-leaks-in-the-BFD-library-s-plugin-han.patch
         0003-PR23460-Add-a-testcase-for-PR-binutils-23460.patch
         0004-PR23486-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED-x86_64.patch
         0005-PR23486-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
         0006-PR23428-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
-        0004-Dont-link-to-libfl-as-its-unnecessary.patch)
+        0004-Dont-link-to-libfl-as-its-unnecessary.patch
+        000-binutils-stable-branch.patch
+004-Dont-link-to-libfl-as-its-unnecessary.patch
+999-CVE-2018-17359.patch
+999-CVE-2018-17360.patch
+999-CVE-2018-18309.patch
+999-CVE-2018-18605.patch
+999-CVE-2018-18606.patch
+999-CVE-2018-18607.patch
+999-CVE-2018-19931.patch
+999-CVE-2018-19932.patch
+999-CVE-2018-20002.patch
+999-CVE-2018-20623.patch
+999-CVE-2018-20651.patch
+999-CVE-2018-20671.patch
+999-CVE-2018-1000876.patch
+Add-recursion-limit-to-libiberty.patch
+binutils-add-LD_AS_NEEDED-global-env.patch
+gold-get-alignment-of-uncompressed-section.patch
+handle-elf-compressed-align.patch
+initialize-uncompressed_align_pow_p-to-0.patch
+switch-build-flow-to-production.patch)
 
 prepare() {
   mkdir -p binutils-build
 
   #cd binutils-gdb
-  cd binutils-gdb
+  cd binutils
 
   # https://sourceware.org/bugzilla/show_bug.cgi?id=23428
   # https://sourceware.org/bugzilla/show_bug.cgi?id=23486
   #patch -Np1 -i ../0001-PR23428-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
   #patch -Np1 -i ../0004-PR23486-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED-x86_64.patch
   #patch -Np1 -i ../0005-PR23486-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
-  patch -Np1 -i ../0004-Dont-link-to-libfl-as-its-unnecessary.patch
+patch -Np1 < ../000-binutils-stable-branch.patch
+patch -Np1 < ../004-Dont-link-to-libfl-as-its-unnecessary.patch
+patch -Np1 < ../999-CVE-2018-17359.patch
+patch -Np1 < ../999-CVE-2018-17360.patch
+patch -Np1 < ../999-CVE-2018-18309.patch
+patch -Np1 < ../999-CVE-2018-18605.patch
+patch -Np1 < ../999-CVE-2018-18606.patch
+patch -Np1 < ../999-CVE-2018-18607.patch
+patch -Np1 < ../999-CVE-2018-19931.patch
+patch -Np1 < ../999-CVE-2018-19932.patch
+patch -Np1 < ../999-CVE-2018-20002.patch
+patch -Np1 < ../999-CVE-2018-20623.patch
+patch -Np1 < ../999-CVE-2018-20651.patch
+patch -Np1 < ../999-CVE-2018-20671.patch
+patch -Np1 < ../999-CVE-2018-1000876.patch
+patch -Np1 < ../Add-recursion-limit-to-libiberty.patch
+patch -Np1 < ../binutils-add-LD_AS_NEEDED-global-env.patch
+patch -Np1 < ../gold-get-alignment-of-uncompressed-section.patch
+patch -Np1 < ../handle-elf-compressed-align.patch
+patch -Np1 < ../initialize-uncompressed_align_pow_p-to-0.patch
+patch -Np1 < ../switch-build-flow-to-production.patch
 
   # https://sourceware.org/bugzilla/show_bug.cgi?id=23460
   #patch -Np1 -i ../0002-PR23460-Close-resource-leaks-in-the-BFD-library-s-plugin-han.patch
@@ -49,9 +90,9 @@ prepare() {
 }
 
 build() {
-  cd binutils-gdb
+  cd binutils
 
-  "$srcdir/binutils-gdb/configure" \
+  "$srcdir/binutils/configure" \
     --prefix=/usr \
     --with-lib-path=/usr/lib:/usr/local/lib \
     --with-bugurl=https://bugs.archlinux.org/ \
@@ -74,7 +115,7 @@ build() {
 }
 
 check() {
-  cd binutils-gdb
+  cd binutils
 
   # unset LDFLAGS as testsuite makes assumptions about which ones are active
   # ignore failures in gold testsuite...
@@ -82,7 +123,7 @@ check() {
 }
 
 package() {
-  cd binutils-gdb
+  cd binutils
   make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
 
   # Remove unwanted files
