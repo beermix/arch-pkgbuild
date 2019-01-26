@@ -13,7 +13,7 @@ url='http://www.gnu.org/software/libc'
 license=(GPL LGPL)
 makedepends=(git gd lib32-gcc-libs)
 options=(!strip staticlibs)
-#source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
 _commit=b297581acb66f80b513996c1580158b0fb12d469
 source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         locale.gen.txt
@@ -22,32 +22,56 @@ source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
         bz20338.patch
         0001-Revert-elf-Correct-absolute-SHN_ABS-symbol-run-time-.patch
        nsswitch-altfiles.patch
-ld-so-cache-in-var.patch
-fewerlocales.patch
-mkdir-ldconfig.patch
-nonscd.patch
+0006-sin-cos-slow-paths-refactor-duplicated-code-into-dos.patch
+0007-sin-cos-slow-paths-refactor-sincos-implementation.patch
 alternate_trim.patch
-madvise-bss.patch
-spinaphore.patch
-tzselect-proper-zone-file.patch
-large-page-huge-page.patch
-use_madv_free.patch
-malloc_tune.patch
-0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
-stateless.patch
-nsswitch-altfiles-bugfix.patch
-mathlto.patch
-vzeroupper-2.27.patch
-0001-x86-64-Remove-sysdeps-x86_64-fpu-s_sinf.S.patch
-pause.patch
-gcc-8-fix.patch
-spin-smarter.patch
-nostackshrink.patch
-strcpy-avx2.patch
-fix-ld-audit-performance.patch
+bz20338.patch
 c-utf8-locale.patch
+common.patch
 CVE-2016-10739.patch
-CVE-2019-6488.patch)
+CVE-2019-6488.patch
+e_log-fma3.patch
+exp.patch
+exp2.patch
+fewerlocales.patch
+fix-ld-audit-performance.patch
+fix_cpp_building.patch
+fma.patch
+fma-expf.patch
+fma-expf-fix.patch
+gcc-8-fix.patch
+glibc-stable-branch.patch
+large-page-huge-page.patch
+ld-so-cache-in-var.patch
+ldconfig-format-new.patch
+ldconfig-Os.patch
+locale-var-cache.patch
+madvise-bss.patch
+malloc-assert-3.patch
+malloc-relaxed.patch
+malloc_tune.patch
+math-2.27.patch
+mathlto.patch
+memmem.patch
+mkdir-ldconfig.patch
+newmalloc.patch
+nonscd.patch
+nostackshrink.patch
+nsswitch-altfiles.patch
+nsswitch-altfiles-bugfix.patch
+pause.patch
+prefer_erms.patch
+skip-error-msg-ld.so.conf.patch
+spin-smarter.patch
+spinaphore.patch
+stateless.patch
+strcmp-wcscmp-with-AVX2.patch
+strcpy-avx2.patch
+tzselect-proper-zone-file.patch
+use_madv_free.patch
+vzeroupper-2.27.patch
+0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
+0001-x86-64-Remove-sysdeps-x86_64-fpu-s_sinf.S.patch)
 
 prepare() {
   mkdir -p glibc-build lib32-glibc-build
@@ -57,23 +81,37 @@ prepare() {
 
 patch -Np1 < ../bz20338.patch
 
+patch -Np1 < ../glibc-stable-branch.patch
+patch -Np1 < ../0001-Set-host.conf-multi-to-on-by-default.patch
+patch -Np1 < ../skip-error-msg-ld.so.conf.patch
+patch -Np1 < ../ldconfig-format-new.patch
+patch -Np1 < ../0001-sysdeps-unix-Add-support-for-usr-lib32-as-a-system-l.patch
+patch -Np1 < ../nsswitch-altfiles.patch
+patch -Np1 < ../ld-so-cache-in-var.patch
+patch -Np1 < ../fewerlocales.patch
+patch -Np1 < ../mkdir-ldconfig.patch
+patch -Np1 < ../locale-var-cache.patch
 patch -Np1 < ../nonscd.patch
 patch -Np1 < ../alternate_trim.patch
 patch -Np1 < ../madvise-bss.patch
 patch -Np1 < ../spinaphore.patch
+patch -Np1 < ../tzselect-proper-zone-file.patch
 patch -Np1 < ../large-page-huge-page.patch
 patch -Np1 < ../use_madv_free.patch
 patch -Np1 < ../malloc_tune.patch
 patch -Np1 < ../0001-misc-Support-fallback-stateless-shells-path-in-absen.patch
 patch -Np1 < ../stateless.patch
+patch -Np1 < ../nsswitch-altfiles-bugfix.patch
 patch -Np1 < ../mathlto.patch
 patch -Np1 < ../vzeroupper-2.27.patch
+patch -Np1 < ../0001-x86-64-Remove-sysdeps-x86_64-fpu-s_sinf.S.patch
 patch -Np1 < ../pause.patch
 patch -Np1 < ../gcc-8-fix.patch
 patch -Np1 < ../spin-smarter.patch
 patch -Np1 < ../nostackshrink.patch
 patch -Np1 < ../strcpy-avx2.patch
 patch -Np1 < ../fix-ld-audit-performance.patch
+patch -Np1 < ../c-utf8-locale.patch
 patch -Np1 < ../CVE-2016-10739.patch
 patch -Np1 < ../CVE-2019-6488.patch
 }
@@ -89,6 +127,10 @@ build() {
       --enable-multi-arch
       --enable-stack-protector=strong
       --enable-kernel=4.17
+      --enable-obsolete-rpc
+      --enable-lock-elision=yes
+      --disable-debug
+      --without-gd
       --disable-profile
       --disable-werror
   )
