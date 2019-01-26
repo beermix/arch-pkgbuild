@@ -6,3 +6,4 @@ src
 *.sig
 binutils-gdb
 glibc
+.git
