@@ -82,7 +82,6 @@ build() {
       --enable-bind-now
       --enable-lock-elision
       --enable-multi-arch
-      --enable-stack-protector=strong
       --enable-kernel=4.17
       --disable-profile
       --disable-werror
