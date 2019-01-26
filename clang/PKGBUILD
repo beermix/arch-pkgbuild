@@ -54,7 +54,7 @@ build() {
     -DSPHINX_WARNINGS_AS_ERRORS=OFF \
     -DLLVM_EXTERNAL_LIT=/usr/bin/lit \
     -DLLVM_MAIN_SRC_DIR="$srcdir/llvm-$pkgver.src"
-  ninja
+  ionice -c3 nice -n20 noti ninja -j7
 }
 
 check() {
