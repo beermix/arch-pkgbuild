@@ -82,10 +82,7 @@ prepare() {
 
 patch -Np1 < ../bz20338.patch
 
-patch -Np1 < ../skip-error-msg-ld.so.conf.patch
-patch -Np1 < ../ldconfig-format-new.patch
 patch -Np1 < ../nsswitch-altfiles.patch
-patch -Np1 < ../ld-so-cache-in-var.patch
 patch -Np1 < ../nonscd.patch
 patch -Np1 < ../alternate_trim.patch
 patch -Np1 < ../madvise-bss.patch
