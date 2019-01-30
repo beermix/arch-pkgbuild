@@ -75,7 +75,7 @@ patch -Np1 < ../999-CVE-2018-20651.patch
 patch -Np1 < ../999-CVE-2018-20671.patch
 patch -Np1 < ../999-CVE-2018-1000876.patch
 patch -Np1 < ../Add-recursion-limit-to-libiberty.patch
-patch -Np1 < ../binutils-add-LD_AS_NEEDED-global-env.patch
+#patch -Np1 < ../binutils-add-LD_AS_NEEDED-global-env.patch
 patch -Np1 < ../gold-get-alignment-of-uncompressed-section.patch
 patch -Np1 < ../handle-elf-compressed-align.patch
 patch -Np1 < ../initialize-uncompressed_align_pow_p-to-0.patch
